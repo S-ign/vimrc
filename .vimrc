@@ -52,6 +52,7 @@ set t_ut=
 set t_Co=256
 inoremap jk <esc>
 inoremap jo <C-o>
+inoremap <F9> <C-O>za
 setlocal tabstop=2
 setlocal shiftwidth=2
 set vb t_vb=
@@ -69,8 +70,10 @@ let g:conoline_color_insert_nr_light = "ctermbg=red"
  omap / <Plug>(easymotion-tn)
  map  n <Plug>(easymotion-next)
  map  N <Plug>(easymotion-prev)
- map <F4> :! python3 %<CR>
- map <F2> :w <CR>
+ map <F4> :! sudo service apache2 restart<CR>
+ map <F2> :wa <CR>
  map <C-h> :tabp<CR>
  map <C-l> :tabn<CR>
+ nmap <F7> :NERDTreeToggle<CR>
+ nmap <A-z> zf<S-]>
  autocmd Filetype * setlocal tabstop=4
