@@ -10,6 +10,7 @@
 #First get Vundle in home directory:
 cd ~;
 sudo apt-get install -qq vim
+sudo yum -y install vim
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp ~/vimrc/.vimrc ~/;
 vim -c 'PluginInstall' -c 'qa!'
