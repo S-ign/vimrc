@@ -57,7 +57,7 @@ setlocal tabstop=2
 setlocal shiftwidth=2
 set vb t_vb=
 let g:airline_theme= 'angr'
-colorscheme 256-grayvim
+" colorscheme 256-grayvim
 let g:conoline_auto_enable = 1
 let g:conoline_color_normal_light = "ctermbg=240"
 let g:conoline_color_normal_nr_light = "ctermbg=240 ctermfg=white"
