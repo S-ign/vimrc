@@ -1,8 +1,9 @@
 filetype off                  " required
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-"alternatively, pass a path where Vundle should install plugins"
+" alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
@@ -48,7 +49,7 @@ set t_Co=256
 set vb t_vb=
 inoremap jk <esc>
 inoremap jl <C-o>
-inoremap <F9> <C-O>za                                                                                                                                                               Xinoremap <F9> <C-O>za
+inoremap <F9> <C-O>za
 setlocal tabstop=2
 setlocal shiftwidth=2
 
@@ -88,7 +89,7 @@ map <A-j> :lprev<CR>
 map <A-k> :lnext<CR>
 map <A-h> :tabp<CR>
 map <A-l> :tabn<CR>
-map <A-\> /skdjfljskdjfkdjfh<CR>
+map <A-\> /clearing|_|search...<CR>
 map <A-c> :lclose<CR>
 map <A-o> :lopen<CR>
 nmap <F7> :NERDTreeToggle<CR>
