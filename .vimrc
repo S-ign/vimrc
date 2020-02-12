@@ -93,5 +93,12 @@ map <A-\> /clearing|_|search...<CR>
 map <A-c> :lclose<CR>
 map <A-o> :lopen<CR>
 nmap <F7> :NERDTreeToggle<CR>
+#nnoremap ^[j :lprev<CR>
+#nnoremap ^[k :lnext<CR>
+#nnoremap ^[h :tabp<CR>
+#nnoremap ^[l :tabn<CR>
+#nnoremap ^[\ /.o.o.o.<CR>
+#nnoremap ^[c :lclose<CR>
+#nnoremap ^[o :lopen<CR>
 nmap <A-z> zf<S-]>
 autocmd Filetype * setlocal tabstop=4
