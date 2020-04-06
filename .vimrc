@@ -26,7 +26,8 @@ Plugin 'peterrincker/vim-argumentative'
 Plugin 'hashivim/vim-terraform'
 Plugin 'juliosueiras/vim-terraform-completion'
 Plugin 'aserebryakov/vim-todo-lists'
-Plugin 'scrooloose/syntastic'
+Plugin 'dense-analysis/ale'
+Plugin 'yggdroot/indentline'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
