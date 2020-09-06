@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#Run this to install vundle and init.vim and nvim
+#-----------------------------------------
+#Install Vim Env
+#----------------------------------
+#First get Vundle in home directory:
+cd ~;
+apt-get install -qq neovim
+yum -y install neovim
+curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh > install.sh
+sh ./install.sh
+cp ~/vimrc/.init.vim ~/.config/nvim/init.vim;
+nvim -c 'NeoBundleInstall' -c 'NeoBundleUpdate' -c 'qa!'
