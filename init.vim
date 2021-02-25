@@ -42,6 +42,10 @@ NeoBundle 'nsf/gocode', {'rtp': 'nvim/'}
 NeoBundle 'Shougo/deoplete.nvim'
 NeoBundle 'zchee/deoplete-go'
 NeoBundle 'deoplete-plugins/deoplete-go', {'build': {'unix': 'make'}}
+NeoBundle 'nvim-lua/popup.nvim'
+NeoBundle 'nvim-lua/plenary.nvim'
+NeoBundle 'nvim-telescope/telescope.nvim'
+NeoBundle 'yuttie/comfortable-motion.vim'
 call neobundle#end()
 
 " Required:
@@ -56,6 +60,10 @@ NeoBundleCheck
 let g:deoplete#enable_at_startup = 0
 autocmd InsertEnter * call deoplete#enable()
 call deoplete#custom#option('auto_complete_delay', 0)
+
+if executable('rg')
+	let g:rg_derive_root='true'
+endif
 "endif
 
 " Disable deoplete when in multi cursor mode
@@ -69,7 +77,10 @@ call deoplete#custom#option('auto_complete_delay', 0)
 " call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
 
 " close preview window on leaving the insert mode
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+
+" leader key is ,
+let mapleader=","
 
 filetype plugin indent on    " required
 syntax on
@@ -79,6 +90,8 @@ set vb t_vb=
 inoremap jk <esc>
 inoremap jl <C-o>
 inoremap <F9> <C-O>za
+set tabstop=2
+set shiftwidth=2
 setlocal tabstop=2
 setlocal shiftwidth=2
 
@@ -124,7 +137,21 @@ map <C-l> :set number! relativenumber!<CR>
 nmap <F8> :NERDTreeToggle<CR>
 nmap <A-p> :set paste!<CR>
 nmap <A-z> :GoRen<CR>
-nmap <A-t> :GoTest<CR>
+
+" old go coverage map
+" nmap <A-t> :! go test -cover
+
+" new go coverage map that spits out a html file you can visually see the
+" coverage with color
+nmap <A-t> :! go test -coverprofile=coverage.out && go tool cover -html=coverage.out<CR>
+
 nmap <A-r> :GoRun<CR>
 nmap <A-[> :GoDeclsDir<CR>
+nmap <A-i> :GoImports<CR>
 nmap <C-a> :GoAlternate<CR>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <silent> <C-d> :call comfortable_motion#flick(100)<CR>
+nnoremap <silent> <C-u> :call comfortable_motion#flick(-100)<CR>
