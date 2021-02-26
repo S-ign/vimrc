@@ -1,4 +1,5 @@
 " Note: Skip initialization for vim-tiny or vim-small.
+
 if 0 | endif
 
 if &compatible
@@ -21,7 +22,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'VundleVim/Vundle.vim'
 NeoBundle 'vim-airline/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
-NeoBundle 'aradunovic/perun.vim'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'kien/ctrlp.vim'
@@ -29,7 +29,7 @@ NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'easymotion/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'ajh17/vimcompletesme'
-"NeoBundle 'terryma/vim-multiple-cursors'
+NeoBundle 'mg979/vim-visual-multi'
 NeoBundle 'miyakogi/conoline.vim'
 NeoBundle 'delimitMate.vim'
 NeoBundle 'alvan/vim-closetag'
@@ -40,12 +40,13 @@ NeoBundle 'yggdroot/indentline'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'nsf/gocode', {'rtp': 'nvim/'}
 NeoBundle 'Shougo/deoplete.nvim'
-NeoBundle 'zchee/deoplete-go'
-NeoBundle 'deoplete-plugins/deoplete-go', {'build': {'unix': 'make'}}
+"NeoBundle 'zchee/deoplete-go'
+"NeoBundle 'deoplete-plugins/deoplete-go', {'build': {'unix': 'make'}}
 NeoBundle 'nvim-lua/popup.nvim'
 NeoBundle 'nvim-lua/plenary.nvim'
 NeoBundle 'nvim-telescope/telescope.nvim'
 NeoBundle 'yuttie/comfortable-motion.vim'
+NeoBundle 'neovim/nvim-lspconfig'
 call neobundle#end()
 
 " Required:
@@ -55,29 +56,17 @@ filetype plugin indent on
 " this will conveniently prompt you to install them.
 NeoBundleCheck
 
-" if has('nvim')
-    " Enable deoplete on startup
 let g:deoplete#enable_at_startup = 0
 autocmd InsertEnter * call deoplete#enable()
-call deoplete#custom#option('auto_complete_delay', 0)
 
 if executable('rg')
 	let g:rg_derive_root='true'
 endif
-"endif
 
-" Disable deoplete when in multi cursor mode
-" function! Multiple_cursors_before()
-"     let b:deoplete_disable_auto_complete = 1
-" endfunction
-" function! Multiple_cursors_after()
-"     let b:deoplete_disable_auto_complete = 0
-" endfunction
-
-" call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
-
-" close preview window on leaving the insert mode
-" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+lua << EOF 
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.gopls.setup{}
+EOF 
 
 " leader key is ,
 let mapleader=","
