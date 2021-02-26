@@ -9,7 +9,7 @@ apt-get install -qq curl wget python3 python3-pip python3-neovim;
 wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz $HOME;
 tar xzvf $HOME/nvim-linux64.tar.gz;
 cp $HOME/nvim-linux64/bin/nvim /usr/bin;
-cp $HOME/nvim-linux64/share/* /usr/share;
+cp -r $HOME/nvim-linux64/share/* /usr/share/;
 curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh > install.sh;
 sh ./install.sh;
 cp ~/vimrc/init.vim ~/.config/nvim/init.vim;
