@@ -5,7 +5,7 @@
 
 apt-get update;
 cd ~;
-apt-get install -qq curl wget python3 python3-pip python-neovim python3-neovim;
+apt-get install -qq curl wget python3 python3-pip python3-neovim;
 wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz $HOME;
 tar xzvf $HOME/nvim-linux64.tar.gz;
 cp $HOME/nvim-linux64/bin/nvim /usr/bin;
