@@ -20,4 +20,5 @@ export GOPATH=$HOME/gopath
 export PATH=$PATH:$GOPATH/bin
 echo "export GOPATH=$HOME/gopath" >> $HOME/.bashrc
 echo "export PATH=$PATH:$GOPATH/bin" >> $HOME/.bashrc
+GO111MODULE=on go get golang.org/x/tools/gopls@latest
 nvim -c 'NeoBundleInstall' -c 'NeoBundleUpdate' -c 'GoInstallBinaries' -c 'qa!';
