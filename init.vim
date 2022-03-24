@@ -178,7 +178,10 @@ nnoremap <leader>fg <cmd>Telescope live_grep theme=ivy<cr>
 nnoremap <leader>fb <cmd>Telescope buffers theme=ivy<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags theme=ivy<cr>
 nnoremap <leader>fc <cmd>Telescope commands theme=ivy<cr>
+"nnoremap <leader>err !!cat ~/nvim/templates/go/err.txt<cr>Vj>o
 nnoremap <leader>err :GoIfErr<cr>
+nnoremap <leader>bap !!cat ~/nvim/templates/go/buffalo/assetPath<cr>f"a
+nnoremap <leader>rfce !!cat ~/nvim/templates/react/rfce<cr>:%s/Header/\=expand('%:t:r')<cr>:noh<cr>
 
 let g:comfortable_motion_no_default_key_mappings = 1
 nnoremap <silent> <C-d> :call comfortable_motion#flick(75)<CR>
