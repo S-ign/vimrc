@@ -20,6 +20,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " Refer to |:NeoBundle-examples|.
 " Note: You don't set neobundle setting in .gvimrc!
 NeoBundle 'VundleVim/Vundle.vim'
+NeoBundle 'mattn/emmet-vim'
 NeoBundle 'vim-airline/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'scrooloose/nerdtree'
@@ -34,19 +35,17 @@ NeoBundle 'miyakogi/conoline.vim'
 NeoBundle 'delimitMate.vim'
 NeoBundle 'alvan/vim-closetag'
 NeoBundle 'peterrincker/vim-argumentative'
-NeoBundle 'aserebryakov/vim-todo-lists'
+NeoBundle 'freitass/todo.txt-vim'
 NeoBundle 'dense-analysis/ale'
-NeoBundle 'yggdroot/indentline'
 NeoBundle 'fatih/vim-go'
-"NeoBundle 'nsf/gocode', {'rtp': 'nvim/'}
-"NeoBundle 'Shougo/deoplete.nvim'
-"NeoBundle 'zchee/deoplete-go'
-"NeoBundle 'deoplete-plugins/deoplete-go', {'build': {'unix': 'make'}}
+NeoBundle 'chreekat/vim-paren-crosshairs'
 NeoBundle 'nvim-lua/popup.nvim'
 NeoBundle 'nvim-lua/plenary.nvim'
 NeoBundle 'nvim-telescope/telescope.nvim'
 NeoBundle 'yuttie/comfortable-motion.vim'
 NeoBundle 'neovim/nvim-lspconfig'
+NeoBundle 'pangloss/vim-javascript'
+NeoBundle 'tomlion/vim-solidity'
 call neobundle#end()
 
 " Required:
@@ -95,51 +94,41 @@ local on_attach = function(client, bufnr)
   elseif client.resolved_capabilities.document_range_formatting then
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
   end
-
-  -- Set autocommands conditional on server_capabilities
-  if client.resolved_capabilities.document_highlight then
-    vim.api.nvim_exec([[
-      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]], false)
-  end
 end
 
 -- Use a loop to conveniently both setup defined servers 
 -- and map buffer local keybindings when the language server attaches
-local servers = { "pyright", "gopls" }
+local servers = { "pyright", "gopls", "tsserver", "solc"}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
 EOF 
 
 " leader key is ,
-let mapleader=","
+let mapleader=" "
 
 filetype plugin indent on    " required
 syntax on
 set t_ut=
 set t_Co=256
 set vb t_vb=
+set colorcolumn=80
 inoremap jk <esc>
 inoremap jl <C-o>
 inoremap <F9> <C-O>za
 set tabstop=2
 set shiftwidth=2
+set expandtab
 setlocal tabstop=2
 setlocal shiftwidth=2
 
-"nvim colorscheme
-colorscheme Atelier_DuneDark
+"favorite nvim colorschemes:
+"Blacksea
+colorscheme nord
 
 "airline settings
-let g:airline_theme                  = 'badwolf'
+let g:airline_theme                  = 'luna'
+let g:airline_powerline_fonts = 1
 
 "conoline settings
 let g:conoline_auto_enable           = 1
@@ -150,30 +139,25 @@ let g:conoline_color_normal_nr_light = "ctermbg = green"
 let g:conoline_color_insert_light    = "guibg   = #222233"
 let g:conoline_color_insert_nr_light = "ctermbg = red"
 
-"syntastic settings
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_quiet_messages = {"regex": ['one space', 'too long']}
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_full_redraws=0
+let g:indent_guides_enable_on_vim_startup = 1
+let g:go_gopls_enabled = 1
 
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 map  n <Plug>(easymotion-next)
 map  N <Plug>(easymotion-prev)
-map <F2> :wa<CR>:GoLint<CR>
+map <F2> :wa<CR>:GoDiagnostics<CR>
+map <F3> :wa<CR>:! tsc %<CR>
+map <F4> :wa<CR>:terminal go test -v ./... \| tc<CR>
 map <A-j> :lprev<CR>
 map <A-k> :lnext<CR>
 map <A-h> :tabp<CR>
 map <A-l> :tabn<CR>
-map <A-\> /pogchamp<CR>
+map <A-\> :noh<CR>
 map <A-c> :lclose<CR>
 map <A-o> :lopen<CR>
 map <C-l> :set number! relativenumber!<CR>
+map <C-s> :setlocal spell! spelllange=en_us!<CR>
 nmap <F8> :NERDTreeToggle<CR>
 nmap <A-p> :set paste!<CR>
 nmap <A-z> :GoRen<CR>
@@ -189,9 +173,13 @@ nmap <A-r> :GoRun<CR>
 nmap <A-[> :GoDeclsDir<CR>
 nmap <A-i> :GoImports<CR>
 nmap <C-a> :GoAlternate<CR>
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-nnoremap <silent> <C-d> :call comfortable_motion#flick(100)<CR>
-nnoremap <silent> <C-u> :call comfortable_motion#flick(-100)<CR>
+nnoremap <leader>ff <cmd>Telescope find_files theme=ivy<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep theme=ivy<cr>
+nnoremap <leader>fb <cmd>Telescope buffers theme=ivy<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags theme=ivy<cr>
+nnoremap <leader>fc <cmd>Telescope commands theme=ivy<cr>
+nnoremap <leader>err :GoIfErr<cr>
+
+let g:comfortable_motion_no_default_key_mappings = 1
+nnoremap <silent> <C-d> :call comfortable_motion#flick(75)<CR>
+nnoremap <silent> <C-u> :call comfortable_motion#flick(-75)<CR>
