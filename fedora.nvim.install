@@ -1,0 +1,15 @@
+#!/bin/bash
+
+dnf update -y;
+dnf install curl wget python3 python3-pip python3-neovim golang -y;
+wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz -P $HOME;
+tar xzvf nvim-linux64.tar.gz;
+cp nvim-linux64/bin/nvim /usr/bin;
+cp -r nvim-linux64/share/* /usr/share/;
+curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh > install.sh;
+sh ./install.sh;
+cp ~/vimrc/init.vim ~/.config/nvim/init.vim;
+pip3 install --upgrade neovim pynvim msgpack;
+wget https://go.dev/dl/go1.18.linux-amd64.tar.gz -P $HOME;
+rm -rf /usr/local/go && tar -C /usr/local -xzf /$HOME/go1.18.linux-amd64.tar.gz;
+nvim -c 'NeoBundleInstall' -c 'NeoBundleUpdate' -c 'GoInstallBinaries' -c 'qa!';
