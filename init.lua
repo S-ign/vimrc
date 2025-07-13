@@ -27,9 +27,7 @@ vim.opt.rtp:prepend(lazypath)
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
-  -- NOTE: First, some plugins that don't require any configuration
-
-  -- Git related plugins
+  'm4xshen/autoclose.nvim',
   "nvim-lua/plenary.nvim",
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -101,6 +99,7 @@ require('lazy').setup({
       },
     },
   },
+
   'hrsh7th/cmp-nvim-lsp',
   'hrsh7th/cmp-buffer',
   'hrsh7th/cmp-path',
@@ -199,7 +198,11 @@ require('lazy').setup({
     'navarasu/onedark.nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      require('onedark').setup {
+      style = 'deep'
+    }
+    -- Enable theme
+    require('onedark').load()
     end,
   },
 
@@ -207,6 +210,7 @@ require('lazy').setup({
   {
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       options = {
         icons_enabled = false,
@@ -247,6 +251,162 @@ require('lazy').setup({
       pcall(require('nvim-treesitter.install').update { with_sync = true })
     end,
   },
+  -- add this to the file where you setup your other plugins:
+
+  -- AI completion plugin
+  {
+    "monkoose/neocodeium",
+    event = "VeryLazy",
+    config = function()
+      local neocodeium = require("neocodeium")
+      neocodeium.setup()
+      vim.keymap.set("i", "<A-f>", neocodeium.accept)
+    end,
+  },
+  { 'dasupradyumna/midnight.nvim', lazy = false, priority = 1000 },
+  {
+    "karb94/neoscroll.nvim",
+    opts = {},
+  },
+
+
+})
+require("autoclose").setup()
+
+require('neoscroll').setup({
+  mappings = {                 -- Keys to be mapped to their corresponding default scrolling animation
+    '<C-u>', '<C-d>',
+    '<C-b>', '<C-f>',
+    '<C-y>', '<C-e>',
+    'zt', 'zz', 'zb',
+  },
+  hide_cursor = true,          -- Hide cursor while scrolling
+  stop_eof = true,             -- Stop at <EOF> when scrolling downwards
+  respect_scrolloff = false,   -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+  cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
+  duration_multiplier = 1.0,   -- Global duration multiplier
+  easing = 'linear',           -- Default easing function
+  pre_hook = nil,              -- Function to run before the scrolling animation starts
+  post_hook = nil,             -- Function to run after the scrolling animation ends
+  performance_mode = false,    -- Disable "Performance Mode" on all buffers.
+  ignored_events = {           -- Events ignored while scrolling
+      'WinScrolled', 'CursorMoved'
+  },
+})
+
+-- stylua: ignore
+local colors = {
+  blue   = '#80a0ff',
+  cyan   = '#79dac8',
+  black  = '#080808',
+  white  = '#c6c6c6',
+  red    = '#ff5189',
+  violet = '#d183e8',
+  grey   = '#303030',
+}
+
+local bubbles_theme = {
+  normal = {
+    a = { fg = colors.black, bg = colors.violet },
+    b = { fg = colors.white, bg = colors.grey },
+    c = { fg = colors.white },
+  },
+
+  insert = { a = { fg = colors.black, bg = colors.blue } },
+  visual = { a = { fg = colors.black, bg = colors.cyan } },
+  replace = { a = { fg = colors.black, bg = colors.red } },
+
+  inactive = {
+    a = { fg = colors.white, bg = colors.black },
+    b = { fg = colors.white, bg = colors.black },
+    c = { fg = colors.white },
+  },
+}
+
+require('lualine').setup {
+  options = {
+    theme = bubbles_theme,
+    component_separators = '',
+    section_separators = { left = '', right = '' },
+  },
+  sections = {
+    lualine_a = { { 'mode', separator = { left = '' }, right_padding = 2 } },
+    lualine_b = { 'filename', 'branch' },
+    lualine_c = {
+      '%=', --[[ add your center components here in place of this comment ]]
+    },
+    lualine_x = {},
+    lualine_y = { 'filetype', 'progress' },
+    lualine_z = {
+      { 'location', separator = { right = '' }, left_padding = 2 },
+    },
+  },
+  inactive_sections = {
+    lualine_a = { 'filename' },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = { 'location' },
+  },
+  tabline = {},
+  extensions = {},
+}
+
+-- NeoCodeium Configuration
+require("neocodeium").setup({
+  -- If `false`, then would not start windsurf server (disabled state)
+  -- You can manually enable it at runtime with `:NeoCodeium enable`
+  enabled = true,
+  -- Path to a custom windsurf server binary (you can download one from:
+  -- https://github.com/Exafunction/codeium/releases)
+  bin = nil,
+  -- When set to `true`, autosuggestions are disabled.
+  -- Use `require'neodecodeium'.cycle_or_complete()` to show suggestions manually
+  manual = false,
+  -- Information about the API server to use
+  server = {
+    -- API URL to use (for Enterprise mode)
+    api_url = nil,
+    -- Portal URL to use (for registering a user and downloading the binary)
+    portal_url = nil,
+  },
+  -- Set to `false` to disable showing the number of suggestions label in the line number column
+  show_label = true,
+  -- Set to `true` to enable suggestions debounce
+  debounce = false,
+  -- Maximum number of lines parsed from loaded buffers (current buffer always fully parsed)
+  -- Set to `0` to disable parsing non-current buffers (may lower suggestion quality)
+  -- Set it to `-1` to parse all lines
+  max_lines = 10000,
+  -- Set to `true` to disable some non-important messages, like "NeoCodeium: server started..."
+  silent = false,
+  -- Set to `false` to enable suggestions in special buftypes, like `nofile` etc.
+  disable_in_special_buftypes = true,
+  -- Sets default log level. One of "trace", "debug", "info", "warn", "error"
+  log_level = "warn",
+  -- Set `enabled` to `true` to enable single line mode.
+  -- In this mode, multi-line suggestions would collapse into a single line and only
+  -- shows full lines when on the end of the suggested (accepted) line.
+  -- So it is less distracting and works better with other completion plugins.
+  single_line = {
+    enabled = false,
+    label = "...", -- Label indicating that there is multi-line suggestion.
+  },
+  -- Set to a function that returns `true` if a buffer should be enabled
+  -- and `false` if the buffer should be disabled
+  -- You can still enable disabled by this option buffer with `:NeoCodeium enable_buffer`
+  filter = function(bufnr) return true end,
+  -- Set to `false` to disable suggestions in buffers with specific filetypes
+  -- You can still enable disabled by this option buffer with `:NeoCodeium enable_buffer`
+  filetypes = {
+    help = false,
+    gitcommit = false,
+    gitrebase = false,
+    ["."] = false,
+  },
+  -- List of directories and files to detect workspace root directory for Windsurf Chat
+  root_dir = { ".bzr", ".git", ".hg", ".svn", "_FOSSIL_", "package.json" }
 })
 
 
@@ -472,7 +632,7 @@ cmp.setup({
   snippet = {
     -- REQUIRED - you must specify a snippet engine
     expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
       -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
       -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
@@ -537,11 +697,6 @@ cmp.setup.cmdline(':', {
   matching = { disallow_symbol_nonprefix_matching = false }
 })
 
--- vim.lsp.enable('gopls')
--- vim.lsp.enable('rust_analyzer')
--- vim.lsp.enable('lua_ls')
--- vim.lsp.enable('motoko_lsp')
--- vim.lsp.enable('omnisharp')
 -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
@@ -561,49 +716,6 @@ require('lspconfig')['motoko_lsp'].setup {
 require('lspconfig')['omnisharp'].setup {
   capabilities = capabilities
 }
--- local cmp = require 'cmp'
--- local luasnip = require 'luasnip'
---
--- luasnip.config.setup {}
---
--- cmp.setup {
---   snippet = {
---     expand = function(args)
---       luasnip.lsp_expand(args.body)
---     end,
---   },
---   mapping = cmp.mapping.preset.insert {
---     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
---     ['<C-f>'] = cmp.mapping.scroll_docs(4),
---     ['<C-Space>'] = cmp.mapping.complete {},
---     ['<CR>'] = cmp.mapping.confirm {
---       behavior = cmp.ConfirmBehavior.Replace,
---       select = true,
---     },
---     ['<Tab>'] = cmp.mapping(function(fallback)
---       if cmp.visible() then
---         cmp.select_next_item()
---       elseif luasnip.expand_or_jumpable() then
---         luasnip.expand_or_jump()
---       else
---         fallback()
---       end
---     end, { 'i', 's' }),
---     ['<S-Tab>'] = cmp.mapping(function(fallback)
---       if cmp.visible() then
---         cmp.select_prev_item()
---       elseif luasnip.jumpable(-1) then
---         luasnip.jump(-1)
---       else
---         fallback()
---       end
---     end, { 'i', 's' }),
---   },
---   sources = {
---     { name = 'nvim_lsp' },
---     { name = 'luasnip' },
---   },
--- }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
@@ -612,7 +724,7 @@ require('lspconfig')['omnisharp'].setup {
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-
+vim.bo.omnifunc = nil
 
 local options = { noremap = true }
 vim.keymap.set("i", "jk", "<Esc>")
@@ -623,9 +735,8 @@ vim.keymap.set("n", "<C-h>", "^")
 vim.keymap.set("n", "<C-l>", "$")
 vim.opt.cursorline = true
 vim.opt.colorcolumn = "100"
-vim.opt.relativenumber = true
 --vim.keymap.set('n', '<leader>(', "i ()<esc>i<cr><c-o>O")
-vim.keymap.set('n', '{', "i {}<esc>i<cr><c-o>O")
-vim.keymap.set('n', '"', "i\"\"<esc>i")
-vim.keymap.set('n', '(', "a()<esc>i")
-vim.keymap.set('n', '<leader>[', "i []<esc>i<cr><c-o>O")
+-- vim.keymap.set('n', '{', "i {}<esc>i<cr><c-o>O")
+-- vim.keymap.set('n', '"', "i\"\"<esc>i")
+-- vim.keymap.set('n', '(', "a()<esc>i")
+-- vim.keymap.set('n', '<leader>[', "i []<esc>i<cr><c-o>O")
