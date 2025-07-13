@@ -301,20 +301,24 @@ local colors = {
   black  = '#080808',
   white  = '#c6c6c6',
   red    = '#ff5189',
+  burgandy = '#59000A',
   violet = '#d183e8',
   grey   = '#303030',
+  -- darkGreen = '#006400',
+  darkGreen = '#004d00',
+  darkBrown = '#201513',
 }
 
 local bubbles_theme = {
   normal = {
-    a = { fg = colors.black, bg = colors.violet },
+    a = { fg = colors.black, bg = colors.burgandy },
     b = { fg = colors.white, bg = colors.grey },
-    c = { fg = colors.white },
+    c = { fg = colors.red },
   },
 
-  insert = { a = { fg = colors.black, bg = colors.blue } },
+  insert = { a = { fg = colors.black, bg = colors.darkGreen } },
   visual = { a = { fg = colors.black, bg = colors.cyan } },
-  replace = { a = { fg = colors.black, bg = colors.red } },
+  replace = { a = { fg = colors.burgandy, bg = colors.white } },
 
   inactive = {
     a = { fg = colors.white, bg = colors.black },
@@ -699,22 +703,22 @@ cmp.setup.cmdline(':', {
 
 -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
---require('lspconfig')['gopls', 'rust_analyzer', 'lua_ls', 'motoko_lsp', 'omnisharp'].setup {
 require('lspconfig')['gopls'].setup {
-  capabilities = capabilities
+  capabilities = capabilities,
 }
 require('lspconfig')['rust_analyzer'].setup {
-  capabilities = capabilities
+  capabilities = capabilities,
 }
 require('lspconfig')['lua_ls'].setup {
-  capabilities = capabilities
+  capabilities = capabilities,
 }
 require('lspconfig')['motoko_lsp'].setup {
-  capabilities = capabilities
+  capabilities = capabilities,
 }
 require('lspconfig')['omnisharp'].setup {
-  capabilities = capabilities
+  capabilities = capabilities,
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
@@ -725,6 +729,7 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.bo.omnifunc = nil
+vim.bo.completefunc = nil
 
 local options = { noremap = true }
 vim.keymap.set("i", "jk", "<Esc>")
